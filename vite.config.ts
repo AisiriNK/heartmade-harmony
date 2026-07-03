@@ -7,9 +7,19 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  vite: {
+    // Keep local dev at root, but build under the repository path on GitHub Pages.
+    base: process.env.GITHUB_ACTIONS ? "/heartmade-harmony/" : "/",
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // Emit static HTML files during build so GitHub Pages can serve index.html.
+    prerender: {
+      enabled: true,
+      crawlLinks: true,
+      failOnError: false,
+    },
   },
 });
